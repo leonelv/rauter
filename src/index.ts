@@ -63,6 +63,8 @@ class Router {
     }
 
     this.errorMessage = errorMessage
+
+    //declaring method stores
     this.DELETE = this.wrapMethod({})
     this.GET = this.wrapMethod({})
     this.PATCH = this.wrapMethod({})
@@ -126,47 +128,76 @@ class Router {
     if (typeof URL !== 'string') {
       throw new TypeError(`URL expected a string but got ${URL}`)
     }
+
+    // adding a / for safety
     if (!URL.startsWith('/')) URL = '/' + URL
 
     const MethodStore = (this[method.toUpperCase()] as unknown) as any
 
+    // create a regexp pattern source and use it as an object key
     const URLRegexp: string = pathToRegexp(URL).source
+    // i don't know if i'm very clever or very stupid for storing values inside a function and treating it as any object
     callback.url = URL
+    // registering callback
     MethodStore[URLRegexp] = callback
   }
 
+  /**
+   * @static
+   * @method use
+   * @description this method allow us to handle all our requests with a specific router
+   * @param router - the router object that we want to use
+   * @param request - the request from the client
+   * @param response - the server response
+   */
   static use(router: Router, request: IncomingMessage, response: ServerResponse): void {
     const RegExpSources = Object.keys(router[request.method as string])
 
+    /**
+     * @private
+     * @function handler
+     * @param {string} match - uses this value as an index for accessing the handler
+     */
     function handler(match: string): void {
+      // cb references the handler
       const cb = router[request.method as string][match]
+      // url is the URL that we set at the method __registerHTTPRequestHandler
       const { url } = cb
-
+      // here we extract the params of the url
       const params = getParams(url)
+      // and here we set the params inside the request object
       request.params = params
-
+      //then, we call the handler
       cb(request, response)
     }
 
+    /**
+     * @private
+     * @function getParams
+     * @param url the url that this function will use to parse the params
+     */
     function getParams(url: string): any {
       if (url) {
+        // here we extract the values from the request
         const values: any[] | null = pathToRegexp(url).exec(request.url as string)
+        // and here the info of the path
         const names: any[] = pathToRegexp.parse(url)
 
         const params: any = {}
 
         if (values && values.length > 1) {
+          // we are mapping the values here
           for (let i = 1; i < values.length; i++) {
             const value = values[i]
             const name = names[i].name
             params[name] = value
           }
         }
-
         return params
       }
     }
 
+    // here we check if the request has an available handler
     for (let i = 0; i < RegExpSources.length; i++) {
       let r: RegExp = new RegExp(RegExpSources[i])
       const itsAMatch = r.test(request.url as string)
@@ -177,6 +208,7 @@ class Router {
       }
     }
 
+    // if there's not any handler, we pass an empty string, that will return a not found error to the client
     handler('')
     return
   }

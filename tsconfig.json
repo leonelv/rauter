@@ -5,7 +5,12 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "declaration": true
+    "declaration": true,
+    "types": [
+      "node",
+      "mocha",
+      "chai"
+    ]
   },
   "exclude": [
     "node_modules"

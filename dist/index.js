@@ -117,10 +117,6 @@ class Router {
         if (!URL.startsWith('/'))
             URL = '/' + URL;
         const MethodStore = this[method.toUpperCase()];
-        const valid = /\w+:(\/?\/?)[^\s]+/;
-        if (!valid.test(URL)) {
-            throw new Error('the url is not valid');
-        }
         // create a regexp pattern source and use it as an object key
         const URLRegexp = path_to_regexp_1.default(URL).source;
         // i don't know if i'm very clever or very stupid for storing values inside a function and treating it as any object

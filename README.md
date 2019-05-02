@@ -22,6 +22,8 @@ $ yarn add rauter
 
 ## Example
 
+### With HTTP from Node.js
+
 ```javascript
 const http = require('http')
 const Rauter = require('rauter')
@@ -49,6 +51,27 @@ server.listen(port, err => {
   }
 
   console.log(`server is listening on ${port}`)
+})
+```
+
+### With Firebase Cloud Functions
+
+```javascript
+const functions = require('firebase-functions')
+const Rauter = require('rauter')
+
+const router = new Rauter()
+
+router.get('/', (req, res) => {
+  res.send('hello world')
+})
+
+router.get('/greetings/:name', (req, res) => {
+  res.send(`hello ${req.params.name}`)
+})
+
+exports.functionName = functions.https.onRequest((req, res) => {
+  Rauter.use(router, req, res)
 })
 ```
 

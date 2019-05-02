@@ -1,6 +1,6 @@
 {
   "name": "rauter",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "An experimental JS router for any HTTP server based on the HTTP module from Node.js",
   "main": "dist/index.js",
   "repository": "https://github.com/leonelv/rauter",

@@ -1,6 +1,6 @@
 # Rauter
 
-![GitHub Logo](https://img.shields.io/snyk/vulnerabilities/npm/rauter@latest.svg) ![GitHub Logo](https://img.shields.io/npm/v/rauter.svg)
+![GitHub Logo](https://img.shields.io/snyk/vulnerabilities/npm/rauter@latest.svg) ![GitHub Logo](https://img.shields.io/npm/v/rauter.svg) [![Build Status](https://travis-ci.org/leonelv/rauter.svg?branch=master)](https://travis-ci.org/leonelv/rauter)
 
 Rauter is an experimental router library written in Typescript, for any framework based in the Node.js's HTTP library, comes with a params parser by default.
 
@@ -20,7 +20,7 @@ With yarn:
 $ yarn add rauter
 ```
 
-## Example	
+## Example
 
 ```javascript
 const http = require('http')
@@ -32,7 +32,6 @@ const router = new Rauter('url not found')
 router.get('/', (req, res) => {
   res.end('hello')
 })
-
 
 router.get('/hello/:name', (req, res) => {
   res.end(`hello ${req.params.id}`)

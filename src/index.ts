@@ -91,6 +91,9 @@ class Router {
         } else {
           //if the property doesn't exist, returns a handler that sends a 404 to the client
           return (req: ClientRequest, res: ServerResponse) => {
+            if (!req || !res) {
+              throw new Error('req or res is not defined')
+            }
             res.statusCode = 404 // set the status
             res.end(errorMessage) // send content and end stream
           }
@@ -126,14 +129,13 @@ class Router {
     }
 
     if (typeof URL !== 'string') {
-      throw new TypeError(`URL expected a string but got ${URL}`)
+      throw new TypeError(`URL expected a string but got ${typeof URL}`)
     }
 
     // adding a / for safety
     if (!URL.startsWith('/')) URL = '/' + URL
 
     const MethodStore = (this[method.toUpperCase()] as unknown) as any
-
     // create a regexp pattern source and use it as an object key
     const URLRegexp: string = pathToRegexp(URL).source
     // i don't know if i'm very clever or very stupid for storing values inside a function and treating it as any object

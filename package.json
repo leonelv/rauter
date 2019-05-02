@@ -9,8 +9,8 @@
   "private": false,
   "types": "index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "test": "mocha -r ts-node src/**.ts"
+    "build": "tsc && mocha",
+    "test": "mocha"
   },
   "dependencies": {
     "path-to-regexp": "3.0.0"
